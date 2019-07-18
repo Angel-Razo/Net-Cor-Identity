@@ -38,30 +38,51 @@ namespace WebApp
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<IdentityUser,IdentityRole>(
+                options =>
+                {
+                    // Password settings.
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredUniqueChars = 1;
+
+                    // Lockout settings.
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                    options.Lockout.MaxFailedAccessAttempts = 100;
+                    options.Lockout.AllowedForNewUsers = true;
+
+                    // User settings.
+                    options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    options.User.RequireUniqueEmail = false;
+                }
+                )
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    // Password settings.
+            //    options.Password.RequireDigit = true;
+            //    options.Password.RequireLowercase = false;
+            //    options.Password.RequireNonAlphanumeric = false;
+            //    options.Password.RequireUppercase = false;
+            //    options.Password.RequiredLength = 6;
+            //    options.Password.RequiredUniqueChars = 1;
 
-                // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 100;
-                options.Lockout.AllowedForNewUsers = true;
+            //    // Lockout settings.
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            //    options.Lockout.MaxFailedAccessAttempts = 100;
+            //    options.Lockout.AllowedForNewUsers = true;
 
-                // User settings.
-                options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
-            });
+            //    // User settings.
+            //    options.User.AllowedUserNameCharacters =
+            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            //    options.User.RequireUniqueEmail = false;
+            //});
 
             services.ConfigureApplicationCookie(options =>
             {

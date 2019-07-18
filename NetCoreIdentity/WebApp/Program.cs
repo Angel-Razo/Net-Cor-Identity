@@ -42,7 +42,7 @@ namespace WebApp
                         UserName = "admin@test.com",
                         Email = "admin@test.com"
                     };
-                    var result = userMgr.CreateAsync(adminUser, "password").GetAwaiter().GetResult();
+                    var result = userMgr.CreateAsync(adminUser, "Admin123").GetAwaiter().GetResult();
                     userMgr.AddToRoleAsync(adminUser, adminRole.Name).GetAwaiter().GetResult();
                 }
             }
